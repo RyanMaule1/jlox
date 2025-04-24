@@ -181,8 +181,31 @@ public class Scanner {
             case '<': addToken(match('=') ? LESS_EQUAL : LESS); break;
             case '>': addToken(match('=') ? GREATER_EQUAL : GREATER); break;
             case '/': if (match('/')) {
-                
+                //handles single line comments
                 while (peek() != '\n' && !isAtEnd()) advance();
+            } else if (match('*')) {
+                int errorLine = line; // this line track the openeing comment line for error tracking
+
+
+                //handles block comments, nested doesnt work 
+                while (peek() != '\0') {
+                    if (advance() == '\n') {
+                        line++;
+                    }
+
+                    if (peek() == '*' && peekAhead() == '/') {
+                        break;
+                    }
+                }
+                
+                if (peek() == '\0') {
+                    Lox.error(errorLine, "Non-terminated Comment");
+                    return;
+                }
+
+                //advance twice to consume terminating comments
+                advance();
+                advance();
             } else {
                 addToken(SLASH);
             } break;

@@ -1,1 +1,3 @@
-var x = * or . or / and ()
+/*var x = * or . 
+or / and () *
+abc /
