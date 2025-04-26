@@ -35,13 +35,18 @@ public class GenerateAST {
         PrintWriter writer = new PrintWriter(outputFile, "UTF-8");
 
         //we will just put all the packages in com.jlox so can hardcode for now
-        writer.println("Package com.jlox;");
+        writer.println("package com.jlox;");
 
         //write to file basic structure
         writer.println();
         writer.println("import java.util.List;");
         writer.println();
         writer.println("abstract class " + baseName + '{');
+
+
+        //create visitor interface
+        defineVisitor(writer, baseName, types);
+
 
          //example of list of types:
 
@@ -60,6 +65,9 @@ public class GenerateAST {
             defineType(writer, baseName, className, fields);
 
         }
+
+        writer.println();
+        writer.println("  abstract <R> R accept(Visitor<R> visitor);");
 
         writer.println('}');
         writer.close();
@@ -88,6 +96,27 @@ public class GenerateAST {
         writer.println("    final " + field + ";");
         }
 
+        writer.println();
+        writer.println("    @Override");
+        writer.println("    <R> R accept(Visitor<R> visitor) {");
+        writer.println("      return visitor.visit" +
+            className + baseName + "(this);");
+        writer.println("    }");
+        writer.println("    }");
+
+    }
+
+
+    private static void defineVisitor(PrintWriter writer, String baseName, List<String> types) {
+        
+        writer.println("  interface Visitor<R> {");
+    
+        for (String type : types) {
+            String typeName = type.split(":")[0].trim();
+            writer.println("    R visit" + typeName + baseName + "(" +
+                typeName + " " + baseName.toLowerCase() + ");");
+        }
+    
         writer.println("  }");
     }
 }
