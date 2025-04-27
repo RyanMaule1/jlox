@@ -1,5 +1,12 @@
+com\jlox\Expr$Unary.class
+com\jlox\Token.class
+com\jlox\Expr$Binary.class
+com\jlox\Expr$Visitor.class
+com\jlox\Expr.class
+com\jlox\Expr$Grouping.class
+com\jlox\Expr$Literal.class
+com\jlox\ASTprinter.class
 com\jlox\Scanner.class
 com\jlox\TokenType.class
 com\tool\GenerateAST.class
-com\jlox\Token.class
 com\jlox\Lox.class
