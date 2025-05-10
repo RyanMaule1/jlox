@@ -8,6 +8,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
+import static com.jlox.TokenType.*;
+
 public class Lox {
 
     public static boolean hadError = false;
@@ -57,28 +59,36 @@ public class Lox {
         }
     }
 
-    public static List<Token> run(String script) {
+    public static void run(String script) {
 
         //will take in our script as a string and have a an attribute with a list of tokens
         Scanner scanner = new Scanner(script);
-
         List<Token> tokens = scanner.scanTokens();
+        Parser parser = new Parser(tokens);
+        Expr expression = parser.parse();
 
-        // For now, just print the tokens.
-        for (Token token : tokens) {
-            System.out.println(token.lexum + ": " + token.type);
-        }
+    // Stop if there was a syntax error.
+        if (hadError) return;
 
-        // for (int i = 0; i < script.length(); i++) {
-        //     System.out.println(script.charAt(i));
-        // }
+        System.out.println(new ASTprinter().print(expression));
 
-        return tokens;
     }
 
     static void error(int line, String message) {
         report(line, "", message);
       }
+
+    static void error(Token token, String message) {
+        if (token.type == EOF) {
+            report(token.line, " at End", message);
+        }
+
+        else {
+            report(token.line, " at " + token.lexum, message);
+        }
+
+
+    }
     
     private static void report(int line, String where, String message) {
         System.err.println("[line " + line + "] Error" + where + ": " + message);

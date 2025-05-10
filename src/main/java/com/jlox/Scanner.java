@@ -235,7 +235,8 @@ public class Scanner {
             
 
         }
-
+        //mark end of file after we get to the end
+        addToken(EOF);
         return tokens;
     }
 

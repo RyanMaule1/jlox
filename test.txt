@@ -1,4 +1,1 @@
-/*var x = * or . 
-or / and () *
-abc */ var x = 7
-/* tuty 7 */ abc
+"This is a string
